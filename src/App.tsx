@@ -1,14 +1,17 @@
 // const topic = "/murmur/1/global/proto";
 
-import { useWaku, WakuContextProvider } from "./client";
+import { useWaku, WakuContextProvider } from "./hooks/waku";
+import { useWakuPeersNumber } from "./hooks/waku_peers_number";
 
 const RelayInfos = () => {
-	const { waku, status } = useWaku();
+	const { status } = useWaku();
+	const { relayPeers, storePeers } = useWakuPeersNumber();
 
 	return (
 		<>
 			<p>Relay status: {status.valueOf()}</p>
-			<p>Nb peers: {waku ? waku!.relay.getPeers().size : "N/A"}</p>
+			<p>Nb relay peers: {relayPeers}</p>
+			<p>Nb store peers: {storePeers}</p>
 		</>
 	);
 };

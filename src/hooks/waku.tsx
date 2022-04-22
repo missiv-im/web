@@ -42,8 +42,6 @@ export const WakuContextProvider = (props: any) => {
 export const useWaku = () => {
 	const ctx = useContext(WakuContext);
 
-	console.log("useWaku");
-
 	useEffect(() => {
 		const initWaku = async () => {
 			ctx.setStatus(ConnectionStatus.Started);
