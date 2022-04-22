@@ -4,11 +4,10 @@ import { useWaku, WakuContextProvider } from "./client";
 
 const RelayInfos = () => {
 	const { waku, status } = useWaku();
-	console.log(waku, status);
 
 	return (
 		<>
-			<p>Relay status: {status ? status.valueOf() : "Undefined"}</p>
+			<p>Relay status: {status.valueOf()}</p>
 			<p>Nb peers: {waku ? waku!.relay.getPeers().size : "N/A"}</p>
 		</>
 	);

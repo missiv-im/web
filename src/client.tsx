@@ -63,7 +63,7 @@ export const useWaku = () => {
 		if (!!ctx.waku) return;
 		// If Waku status not Started, it means we are already starting Waku
 		if (ctx.status !== ConnectionStatus.NotStarted) return;
-
+		// else we init the connection
 		initWaku();
 	}, [ctx]);
 
