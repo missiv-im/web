@@ -1,0 +1,3 @@
+const useWaku = () => {};
+
+export { useWaku };
