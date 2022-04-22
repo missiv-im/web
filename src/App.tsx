@@ -1,34 +1,28 @@
-import { getPredefinedBootstrapNodes, Waku } from "js-waku";
-import * as React from "react";
-
 // const topic = "/murmur/1/global/proto";
 
-function App() {
-	const [waku, setWaku] = React.useState<Waku | undefined>();
-	const [wakuStatus, setWakuStatus] = React.useState("None");
+import { useWaku, WakuContextProvider } from "./client";
 
-	React.useEffect(() => {
-		if (!!waku) return;
-		if (wakuStatus !== "None") return;
-
-		setWakuStatus("Starting");
-
-		Waku.create({ bootstrap: { peers: getPredefinedBootstrapNodes() } }).then((waku) => {
-			setWaku(waku);
-			setWakuStatus("Connecting");
-			waku.waitForRemotePeer().then(() => {
-				setWakuStatus("Ready");
-			});
-		});
-	}, [waku, wakuStatus]);
+const RelayInfos = () => {
+	const { waku, status } = useWaku();
+	console.log(waku, status);
 
 	return (
-		<div className="App">
-			<header className="App-header">
-				<p>Waku node's status: {wakuStatus}</p>
-				<p>Nb peers: {waku ? waku!.relay.getPeers().size : ""}</p>
-			</header>
-		</div>
+		<>
+			<p>Relay status: {status ? status.valueOf() : "Undefined"}</p>
+			<p>Nb peers: {waku ? waku!.relay.getPeers().size : "N/A"}</p>
+		</>
+	);
+};
+
+function App() {
+	return (
+		<WakuContextProvider>
+			<div className="App">
+				<header className="App-header">
+					<RelayInfos />
+				</header>
+			</div>
+		</WakuContextProvider>
 	);
 }
 

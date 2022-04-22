@@ -1,3 +1,0 @@
-const useWaku = () => {};
-
-export { useWaku };
