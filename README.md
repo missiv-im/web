@@ -9,3 +9,5 @@ yarn start
 ```
 
 Then visit http://localhost:3000/ and you are done.
+
+## Pas trop tôt 😊
