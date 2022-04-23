@@ -1,6 +1,7 @@
 {
 	"name": "test-waku",
 	"version": "0.1.0",
+	"homepage": ".",
 	"private": true,
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.16.4",
@@ -16,6 +17,7 @@
 		"crypto-browserify": "^3.12.0",
 		"js-waku": "^0.20.0",
 		"process": "^0.11.10",
+		"protobufjs": "^6.11.2",
 		"react": "^18.0.0",
 		"react-bootstrap-icons": "^1.8.1",
 		"react-dom": "^18.0.0",
