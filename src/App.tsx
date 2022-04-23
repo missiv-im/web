@@ -5,7 +5,9 @@ import { ReactComponent as MainIcon } from "./missive-icon.svg"
 import "./App.css"
 import { Alert } from "shards-react";
 import Conversation from "./Conversation"
+import Navigation from "./Navigation"
 import { setMaxListeners } from "process";
+
 // const topic = "/murmur/1/global/proto";
 
 interface Message {
@@ -57,7 +59,9 @@ function Log(props: any) {
 
 }
 
-
+interface TopicInterface{
+	title:string;
+}
 
 
 function App() {
@@ -88,28 +92,42 @@ function App() {
 	currentUser="Pierre";
 	const [list, setList] = React.useState(initialList);
 	
+	const initialTopics: TopicInterface[] = [{
+		title: "Louis"
+	}];
+	const [topics, setTopics] = React.useState(initialTopics)
+	
+	
 	
 	return (
 		<div className="App">
 			<Header status={wakuStatus} />
+
+			
 			<div className="App-content">
+			<div className="navigation-container col-lg-2">
+				<Navigation topics={topics}/>
+				
+			</div>
+					
 
 
-					<div className="messages-container">
+					
+					
+
+					<div className="messages-container col-lg-10">
 						
 
 						<Conversation messages = {list} currentUser={currentUser} />
 						
-						
 
 					</div>
-
-
 
 			</div>
 			
 			<InputMessageBar  pushMessage={(value:string)=>setList(list=>[...list, {"text":value, "from":currentUser}])}/>
 		</div>
+
 	);
 }
 
