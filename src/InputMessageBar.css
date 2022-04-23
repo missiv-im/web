@@ -1,0 +1,30 @@
+.InputMessageBar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.bar-container{
+    display: flex;
+    width:80%;
+    max-width:40rem;
+    margin-top:2rem;
+    margin-bottom: 2rem;
+
+}
+
+.btn-send{
+    border-radius:50vh;
+    width: 2rem;
+    display: grid !important;
+    justify-content: center;
+    align-items: center;
+    margin-left:1rem;
+    font-size:1rem;
+}
+
+.btn-send:focus{
+    box-shadow: none!important;
+    background-color:#007bff!important;
+}

@@ -1,16 +1,21 @@
+import * as React from "react";
+import InputMessageBar from "./InputMessageBar";
+import { ReactComponent as MainIcon } from "./missive-icon.svg";
+import "./App.css";
+import Conversation from "./Conversation";
+import Navigation from "./Navigation";
+import useWaku, { ConnectionStatus } from "./hooks/waku";
+import useMessageRetriever from "./hooks/useMessagesRetriever";
+import useHelloWorldSender, { contentTopic } from "./hooks/hello_world_sender";
+import HelloWorldMessage from "./lib/proto/hello_world";
+import { WakuMessage } from "js-waku";
+import useWakuPeersNumber from "./hooks/waku_peers_number";
+
 // const topic = "/murmur/1/global/proto";
 
-import { WakuMessage } from "js-waku";
-import { useState } from "react";
-import useHelloWorldSender, { contentTopic } from "./hooks/hello_world_sender";
-import useMessageRetriever from "./hooks/useMessagesRetriever";
-import useWaku, { ConnectionStatus, WakuContextProvider } from "./hooks/waku";
-import useWakuPeersNumber from "./hooks/waku_peers_number";
-import HelloWorldMessage from "./lib/proto/hello_world";
-
-interface MessageType {
-	text: string;
+interface Message {
 	timestamp: Date;
+	text: string;
 }
 
 const decodeMessage = (msg: WakuMessage) => {
@@ -19,76 +24,81 @@ const decodeMessage = (msg: WakuMessage) => {
 	const { text, timestamp } = HelloWorldMessage.toObject(HelloWorldMessage.decode(msg.payload));
 	const time = new Date();
 	time.setTime(timestamp);
-	const message: MessageType = { text, timestamp: time };
+	const message: Message = { text, timestamp: time };
 
 	return message;
 };
 
-const MessagesList = () => {
-	const { messages } = useMessageRetriever<MessageType>([contentTopic], decodeMessage);
+function IndicatorStatus() {
+	const { status } = useWaku();
 
 	return (
 		<div>
-			{messages.map(({ text, timestamp }) => {
-				return (
-					<div key={timestamp.getTime()}>
-						<p>{`${timestamp} -> ${text}`}</p>
-					</div>
-				);
-			})}
+			<div
+				className="pin"
+				style={{
+					background: status !== ConnectionStatus.Connected ? "#c4c4c4" : "rgb(0, 207, 6)"
+				}}></div>
 		</div>
 	);
-};
+}
 
-const RelayInfos = () => {
-	const { status } = useWaku();
-	const { relayPeers, storePeers } = useWakuPeersNumber();
-
+function Header() {
 	return (
-		<>
-			<p>Relay status: {status.valueOf()}</p>
-			<p>Nb relay peers: {relayPeers}</p>
-			<p>Nb store peers: {storePeers}</p>
-		</>
+		<header>
+			<div className="main-icon-header-container">
+				<MainIcon className="main-icon-header" />
+			</div>
+			<div className="right-header-container">
+				<IndicatorStatus />
+			</div>
+		</header>
 	);
-};
+}
 
-const MessageSender = () => {
-	const [inputValue, setInputValue] = useState("");
-	const sendHelloWorld = useHelloWorldSender();
-	const { status } = useWaku();
-
-	const send = async () => {
-		if (status !== ConnectionStatus.Connected) return;
-
-		const timestamp = new Date();
-		const message = inputValue;
-		await sendHelloWorld(message, timestamp);
-		setInputValue("");
-	};
-
-	return (
-		<div>
-			<input type="text" value={inputValue} onChange={(evt) => setInputValue(evt.target.value)} />
-			<button onClick={send}>Send</button>
-		</div>
-	);
-};
+interface TopicInterface {
+	title: string;
+}
 
 function App() {
+	const { messages } = useMessageRetriever<Message>([contentTopic], decodeMessage);
+	const { relayPeers, storePeers } = useWakuPeersNumber();
+	const sendHelloWorld = useHelloWorldSender();
+
+	console.log(messages);
+
+	React.useEffect(() => {
+		console.log(`Relay: ${relayPeers}, Store: ${storePeers}`);
+	}, [relayPeers, storePeers]);
+
+	// simulation de conversation
+	let currentUser: string;
+	// obtention utilisateur (statique pour l'instant)
+	currentUser = "Pierre";
+
+	const initialTopics: TopicInterface[] = [
+		{
+			title: "Louis"
+		}
+	];
+	const [topics] = React.useState(initialTopics);
+
 	return (
-		<WakuContextProvider>
-			<div className="App">
-				<header className="App-header">
-					<RelayInfos />
-					<hr />
-					<p>Messages</p>
-					<MessagesList />
-					<hr />
-					<MessageSender />
-				</header>
+		<div className="App">
+			<Header />
+
+			<div className="App-content">
+				<div className="navigation-container col-lg-2">
+					<Navigation topics={topics} />
+				</div>
+
+				<div className="messages-container col-lg-10">
+					<Conversation messages={messages} currentUser={currentUser} />
+				</div>
 			</div>
-		</WakuContextProvider>
+
+			<InputMessageBar pushMessage={(value: string) => sendHelloWorld(value, new Date())} />
+		</div>
 	);
 }
 

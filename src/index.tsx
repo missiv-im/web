@@ -3,10 +3,18 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 
+// css imports
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css";
+import { WakuContextProvider } from "./hooks/waku";
+
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
 	<React.StrictMode>
-		<App />
+		<WakuContextProvider>
+			<App />
+		</WakuContextProvider>
 	</React.StrictMode>
 );
 
