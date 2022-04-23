@@ -1,5 +1,5 @@
 {
-	"name": "test-waku",
+	"name": "missiv.im",
 	"version": "0.1.0",
 	"homepage": ".",
 	"private": true,
@@ -19,9 +19,12 @@
 		"process": "^0.11.10",
 		"protobufjs": "^6.11.2",
 		"react": "^18.0.0",
+		"react-bootstrap": "^2.3.0",
 		"react-bootstrap-icons": "^1.8.1",
 		"react-dom": "^18.0.0",
 		"react-scripts": "5.0.1",
+		"shards-react": "^1.0.3",
+		"shards-ui": "^3.0.0",
 		"stream-browserify": "^3.0.0",
 		"typescript": "^4.6.3",
 		"web-vitals": "^2.1.4"
