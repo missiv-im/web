@@ -94,7 +94,8 @@ function MessageLine(props: any) {
 	};
 
 	return (
-		<div className={"message-line " + (props.message.from === props.currentUser ? "left-guy" : "right-guy")}>
+		//<div className={"message-line " + (props.message.from === props.currentUser ? "left-guy" : "right-guy")}>
+		<div className={"message-line left-guy"}>
 			<div className="avatar">
 				<img className="avatar-icon" src={AvatarClassicIcon} alt="Avatar" />
 			</div>

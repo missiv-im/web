@@ -1,35 +1,56 @@
-import { getPredefinedBootstrapNodes, Waku } from "js-waku";
 import * as React from "react";
 import InputMessageBar from "./InputMessageBar";
 import { ReactComponent as MainIcon } from "./missive-icon.svg";
 import "./App.css";
 import Conversation from "./Conversation";
 import Navigation from "./Navigation";
+import useWaku, { ConnectionStatus } from "./hooks/waku";
+import useMessageRetriever from "./hooks/useMessagesRetriever";
+import useHelloWorldSender, { contentTopic } from "./hooks/hello_world_sender";
+import HelloWorldMessage from "./lib/proto/hello_world";
+import { WakuMessage } from "js-waku";
+import useWakuPeersNumber from "./hooks/waku_peers_number";
 
 // const topic = "/murmur/1/global/proto";
 
 interface Message {
+	timestamp: Date;
 	text: string;
-	from: string;
 }
 
-function IndicatorStatus(props: any) {
-	console.log(props.status);
+const decodeMessage = (msg: WakuMessage) => {
+	if (!msg.payload) return;
+
+	const { text, timestamp } = HelloWorldMessage.toObject(HelloWorldMessage.decode(msg.payload));
+	const time = new Date();
+	time.setTime(timestamp);
+	const message: Message = { text, timestamp: time };
+
+	return message;
+};
+
+function IndicatorStatus() {
+	const { status } = useWaku();
+
 	return (
 		<div>
-			<div className="pin" style={{ background: props.status !== "Ready" ? "#c4c4c4" : "rgb(0, 207, 6)" }}></div>
+			<div
+				className="pin"
+				style={{
+					background: status !== ConnectionStatus.Connected ? "#c4c4c4" : "rgb(0, 207, 6)"
+				}}></div>
 		</div>
 	);
 }
 
-function Header(props: any) {
+function Header() {
 	return (
 		<header>
 			<div className="main-icon-header-container">
 				<MainIcon className="main-icon-header" />
 			</div>
 			<div className="right-header-container">
-				<IndicatorStatus status={props.status} />
+				<IndicatorStatus />
 			</div>
 		</header>
 	);
@@ -40,35 +61,20 @@ interface TopicInterface {
 }
 
 function App() {
-	const [waku, setWaku] = React.useState<Waku | undefined>();
-	const [wakuStatus, setWakuStatus] = React.useState("None");
+	const { messages } = useMessageRetriever<Message>([contentTopic], decodeMessage);
+	const { relayPeers, storePeers } = useWakuPeersNumber();
+	const sendHelloWorld = useHelloWorldSender();
+
+	console.log(messages);
 
 	React.useEffect(() => {
-		if (!!waku) return;
-		if (wakuStatus !== "None") return;
+		console.log(`Relay: ${relayPeers}, Store: ${storePeers}`);
+	}, [relayPeers, storePeers]);
 
-		setWakuStatus("Starting");
-
-		Waku.create({ bootstrap: { peers: getPredefinedBootstrapNodes() } }).then((waku) => {
-			setWaku(waku);
-			setWakuStatus("Connecting");
-			waku.waitForRemotePeer().then(() => {
-				setWakuStatus("Ready");
-			});
-		});
-	}, [waku, wakuStatus]);
-	// gestion des messages
-	let initialList: Message[];
-	initialList = [];
 	// simulation de conversation
-	initialList = [
-		{ text: "Hello !", from: "Pierre" },
-		{ text: "Hello !", from: "Luc" }
-	];
 	let currentUser: string;
 	// obtention utilisateur (statique pour l'instant)
 	currentUser = "Pierre";
-	const [list, setList] = React.useState(initialList);
 
 	const initialTopics: TopicInterface[] = [
 		{
@@ -79,7 +85,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<Header status={wakuStatus} />
+			<Header />
 
 			<div className="App-content">
 				<div className="navigation-container col-lg-2">
@@ -87,13 +93,11 @@ function App() {
 				</div>
 
 				<div className="messages-container col-lg-10">
-					<Conversation messages={list} currentUser={currentUser} />
+					<Conversation messages={messages} currentUser={currentUser} />
 				</div>
 			</div>
 
-			<InputMessageBar
-				pushMessage={(value: string) => setList((list) => [...list, { text: value, from: currentUser }])}
-			/>
+			<InputMessageBar pushMessage={(value: string) => sendHelloWorld(value, new Date())} />
 		</div>
 	);
 }
