@@ -39,13 +39,21 @@ export const WakuContextProvider = (props: any) => {
 	);
 };
 
-export const useWaku = () => {
+const useWaku = () => {
 	const ctx = useContext(WakuContext);
 
 	useEffect(() => {
 		const initWaku = async () => {
 			ctx.setStatus(ConnectionStatus.Started);
 			const waku = await Waku.create({
+				libp2p: {
+					config: {
+						pubsub: {
+							enabled: true,
+							emitSelf: true
+						}
+					}
+				},
 				bootstrap: {
 					peers: getPredefinedBootstrapNodes("test" as any)
 				}
@@ -67,3 +75,5 @@ export const useWaku = () => {
 
 	return ctx;
 };
+
+export default useWaku;

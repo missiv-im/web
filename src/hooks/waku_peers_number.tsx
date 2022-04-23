@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useWaku } from "./waku";
+import useWaku from "./waku";
 
-export const useWakuPeersNumber = () => {
+const useWakuPeersNumber = () => {
 	const { waku } = useWaku();
 	const [storePeers, setStorePeers] = useState(0);
 	const [relayPeers, setRelayPeers] = useState(0);
@@ -27,3 +27,5 @@ export const useWakuPeersNumber = () => {
 
 	return { storePeers, relayPeers };
 };
+
+export default useWakuPeersNumber;
