@@ -1,34 +1,94 @@
-import { getPredefinedBootstrapNodes, Waku } from "js-waku";
-import * as React from "react";
-
 // const topic = "/murmur/1/global/proto";
 
-function App() {
-	const [waku, setWaku] = React.useState<Waku | undefined>();
-	const [wakuStatus, setWakuStatus] = React.useState("None");
+import { WakuMessage } from "js-waku";
+import { useState } from "react";
+import useHelloWorldSender, { contentTopic } from "./hooks/hello_world_sender";
+import useMessageRetriever from "./hooks/useMessagesRetriever";
+import useWaku, { ConnectionStatus, WakuContextProvider } from "./hooks/waku";
+import useWakuPeersNumber from "./hooks/waku_peers_number";
+import HelloWorldMessage from "./lib/proto/hello_world";
 
-	React.useEffect(() => {
-		if (!!waku) return;
-		if (wakuStatus !== "None") return;
+interface MessageType {
+	text: string;
+	timestamp: Date;
+}
 
-		setWakuStatus("Starting");
+const decodeMessage = (msg: WakuMessage) => {
+	if (!msg.payload) return;
 
-		Waku.create({ bootstrap: { peers: getPredefinedBootstrapNodes() } }).then((waku) => {
-			setWaku(waku);
-			setWakuStatus("Connecting");
-			waku.waitForRemotePeer().then(() => {
-				setWakuStatus("Ready");
-			});
-		});
-	}, [waku, wakuStatus]);
+	const { text, timestamp } = HelloWorldMessage.toObject(HelloWorldMessage.decode(msg.payload));
+	const time = new Date();
+	time.setTime(timestamp);
+	const message: MessageType = { text, timestamp: time };
+
+	return message;
+};
+
+const MessagesList = () => {
+	const { messages } = useMessageRetriever<MessageType>([contentTopic], decodeMessage);
 
 	return (
-		<div className="App">
-			<header className="App-header">
-				<p>Waku node's status: {wakuStatus}</p>
-				<p>Nb peers: {waku ? waku!.relay.getPeers().size : ""}</p>
-			</header>
+		<div>
+			{messages.map(({ text, timestamp }) => {
+				return (
+					<div key={timestamp.getTime()}>
+						<p>{`${timestamp} -> ${text}`}</p>
+					</div>
+				);
+			})}
 		</div>
+	);
+};
+
+const RelayInfos = () => {
+	const { status } = useWaku();
+	const { relayPeers, storePeers } = useWakuPeersNumber();
+
+	return (
+		<>
+			<p>Relay status: {status.valueOf()}</p>
+			<p>Nb relay peers: {relayPeers}</p>
+			<p>Nb store peers: {storePeers}</p>
+		</>
+	);
+};
+
+const MessageSender = () => {
+	const [inputValue, setInputValue] = useState("");
+	const sendHelloWorld = useHelloWorldSender();
+	const { status } = useWaku();
+
+	const send = async () => {
+		if (status !== ConnectionStatus.Connected) return;
+
+		const timestamp = new Date();
+		const message = inputValue;
+		await sendHelloWorld(message, timestamp);
+		setInputValue("");
+	};
+
+	return (
+		<div>
+			<input type="text" value={inputValue} onChange={(evt) => setInputValue(evt.target.value)} />
+			<button onClick={send}>Send</button>
+		</div>
+	);
+};
+
+function App() {
+	return (
+		<WakuContextProvider>
+			<div className="App">
+				<header className="App-header">
+					<RelayInfos />
+					<hr />
+					<p>Messages</p>
+					<MessagesList />
+					<hr />
+					<MessageSender />
+				</header>
+			</div>
+		</WakuContextProvider>
 	);
 }
 
