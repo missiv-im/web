@@ -1,12 +1,10 @@
 import { getPredefinedBootstrapNodes, Waku } from "js-waku";
 import * as React from "react";
-import InputMessageBar from "./InputMessageBar"
-import { ReactComponent as MainIcon } from "./missive-icon.svg"
-import "./App.css"
-import { Alert } from "shards-react";
-import Conversation from "./Conversation"
-import Navigation from "./Navigation"
-import { setMaxListeners } from "process";
+import InputMessageBar from "./InputMessageBar";
+import { ReactComponent as MainIcon } from "./missive-icon.svg";
+import "./App.css";
+import Conversation from "./Conversation";
+import Navigation from "./Navigation";
 
 // const topic = "/murmur/1/global/proto";
 
@@ -15,54 +13,31 @@ interface Message {
 	from: string;
 }
 
-
-
 function IndicatorStatus(props: any) {
-	console.log(props.status)
-	return <div>
-		<div className="pin" style={{ "background": props.status != "Ready" ? "#c4c4c4" : "rgb(0, 207, 6)" }}></div>
-	</div>
+	console.log(props.status);
+	return (
+		<div>
+			<div className="pin" style={{ background: props.status !== "Ready" ? "#c4c4c4" : "rgb(0, 207, 6)" }}></div>
+		</div>
+	);
 }
 
 function Header(props: any) {
-	return <header>
-		<div className="main-icon-header-container">
-			<MainIcon className="main-icon-header" />
-
-		</div>
-		<div className="right-header-container">
-			<IndicatorStatus status={props.status} />
-
-		</div>
-	</header>
+	return (
+		<header>
+			<div className="main-icon-header-container">
+				<MainIcon className="main-icon-header" />
+			</div>
+			<div className="right-header-container">
+				<IndicatorStatus status={props.status} />
+			</div>
+		</header>
+	);
 }
 
-
-
-
-
-function Log(props: any) {
-
-	const [leftTime, setLeftTime] = React.useState(0);
-	const [visible, setVisible] = React.useState(true);
-	React.useEffect(() => {
-		console.log(props.message);
-		const interval = setInterval(() => {
-			setLeftTime(leftTime => leftTime + 1);
-			if (leftTime > 5) {
-				clearInterval(interval);
-				setVisible(false);
-			}
-		}, 1000);
-	});
-	return <Alert fade={true} className="log-alert" open={visible}>{props.message + ""}</Alert>
-
+interface TopicInterface {
+	title: string;
 }
-
-interface TopicInterface{
-	title:string;
-}
-
 
 function App() {
 	const [waku, setWaku] = React.useState<Waku | undefined>();
@@ -86,48 +61,40 @@ function App() {
 	let initialList: Message[];
 	initialList = [];
 	// simulation de conversation
-	initialList = [{"text":"Hello !", "from":"Pierre"},{"text":"Hello !", "from":"Luc"}]
-	let currentUser:string
+	initialList = [
+		{ text: "Hello !", from: "Pierre" },
+		{ text: "Hello !", from: "Luc" }
+	];
+	let currentUser: string;
 	// obtention utilisateur (statique pour l'instant)
-	currentUser="Pierre";
+	currentUser = "Pierre";
 	const [list, setList] = React.useState(initialList);
-	
-	const initialTopics: TopicInterface[] = [{
-		title: "Louis"
-	}];
-	const [topics, setTopics] = React.useState(initialTopics)
-	
-	
-	
+
+	const initialTopics: TopicInterface[] = [
+		{
+			title: "Louis"
+		}
+	];
+	const [topics] = React.useState(initialTopics);
+
 	return (
 		<div className="App">
 			<Header status={wakuStatus} />
 
-			
 			<div className="App-content">
-			<div className="navigation-container col-lg-2">
-				<Navigation topics={topics}/>
-				
+				<div className="navigation-container col-lg-2">
+					<Navigation topics={topics} />
+				</div>
+
+				<div className="messages-container col-lg-10">
+					<Conversation messages={list} currentUser={currentUser} />
+				</div>
 			</div>
-					
 
-
-					
-					
-
-					<div className="messages-container col-lg-10">
-						
-
-						<Conversation messages = {list} currentUser={currentUser} />
-						
-
-					</div>
-
-			</div>
-			
-			<InputMessageBar  pushMessage={(value:string)=>setList(list=>[...list, {"text":value, "from":currentUser}])}/>
+			<InputMessageBar
+				pushMessage={(value: string) => setList((list) => [...list, { text: value, from: currentUser }])}
+			/>
 		</div>
-
 	);
 }
 
