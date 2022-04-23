@@ -1,9 +1,9 @@
 // const topic = "/murmur/1/global/proto";
 
 import { WakuMessage } from "js-waku";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import useHelloWorldSender, { contentTopic } from "./hooks/hello_world_sender";
-import useMessageReceiver from "./hooks/receive_message";
+import useMessageRetriever from "./hooks/useMessagesRetriever";
 import useWaku, { ConnectionStatus, WakuContextProvider } from "./hooks/waku";
 import useWakuPeersNumber from "./hooks/waku_peers_number";
 import HelloWorldMessage from "./lib/proto/hello_world";
@@ -13,39 +13,19 @@ interface MessageType {
 	timestamp: Date;
 }
 
-const RelayInfos = () => {
-	const { status } = useWaku();
-	const { relayPeers, storePeers } = useWakuPeersNumber();
+const decodeMessage = (msg: WakuMessage) => {
+	if (!msg.payload) return;
 
-	return (
-		<>
-			<p>Relay status: {status.valueOf()}</p>
-			<p>Nb relay peers: {relayPeers}</p>
-			<p>Nb store peers: {storePeers}</p>
-		</>
-	);
+	const { text, timestamp } = HelloWorldMessage.toObject(HelloWorldMessage.decode(msg.payload));
+	const time = new Date();
+	time.setTime(timestamp);
+	const message: MessageType = { text, timestamp: time };
+
+	return message;
 };
 
 const MessagesList = () => {
-	const [messages, setMessages] = useState<MessageType[]>([]);
-
-	const processMessages = useCallback(
-		(wakuMessage: WakuMessage) => {
-			if (!wakuMessage.payload) return;
-
-			const { text, timestamp } = HelloWorldMessage.toObject(HelloWorldMessage.decode(wakuMessage.payload));
-			const time = new Date();
-			time.setTime(timestamp);
-			const message = { text, timestamp: time };
-
-			console.log(message);
-
-			const updatedMessages = messages.concat(message);
-			setMessages(updatedMessages);
-		},
-		[messages]
-	);
-	useMessageReceiver([contentTopic], processMessages);
+	const { messages } = useMessageRetriever<MessageType>([contentTopic], decodeMessage);
 
 	return (
 		<div>
@@ -57,6 +37,19 @@ const MessagesList = () => {
 				);
 			})}
 		</div>
+	);
+};
+
+const RelayInfos = () => {
+	const { status } = useWaku();
+	const { relayPeers, storePeers } = useWakuPeersNumber();
+
+	return (
+		<>
+			<p>Relay status: {status.valueOf()}</p>
+			<p>Nb relay peers: {relayPeers}</p>
+			<p>Nb store peers: {storePeers}</p>
+		</>
 	);
 };
 
