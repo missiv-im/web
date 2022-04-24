@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "./static/css/main.20e59257.css",
-    "main.js": "./static/js/main.c02603f9.js",
+    "main.js": "./static/js/main.d208e704.js",
     "static/media/avatar.png": "./static/media/avatar.c2a95cb343586af93006.png",
     "static/media/missive-icon.svg": "./static/media/missive-icon.e50474db4ef143073f12ecf7fcdec9e1.svg",
     "index.html": "./index.html",
     "main.20e59257.css.map": "./static/css/main.20e59257.css.map",
-    "main.c02603f9.js.map": "./static/js/main.c02603f9.js.map"
+    "main.d208e704.js.map": "./static/js/main.d208e704.js.map"
   },
   "entrypoints": [
     "static/css/main.20e59257.css",
-    "static/js/main.c02603f9.js"
+    "static/js/main.d208e704.js"
   ]
 }
