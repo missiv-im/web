@@ -1,4 +1,4 @@
-name: Deploy on GH Pages
+name: Linter and build checker
 
 on: push
 
