@@ -3,7 +3,7 @@ import InputMessageBar from "./InputMessageBar";
 import { ReactComponent as MainIcon } from "./missive-icon.svg";
 import "./App.css";
 import Conversation from "./Conversation";
-import Navigation from "./Navigation";
+import Navigation, { TopicInterface } from "./Navigation";
 import useWaku, { ConnectionStatus } from "./hooks/waku";
 import useMessageRetriever from "./hooks/useMessagesRetriever";
 import useHelloWorldSender, { contentTopic } from "./hooks/hello_world_sender";
@@ -35,10 +35,6 @@ function Header() {
 			</div>
 		</header>
 	);
-}
-
-interface TopicInterface {
-	title: string;
 }
 
 function App() {
