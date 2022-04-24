@@ -22,7 +22,7 @@ const WakuContext = createContext<WakuContextType>({
 	setStatus: () => {}
 });
 
-export const WakuContextProvider = (props: any) => {
+export const WakuContextProvider = (props: { children: React.ReactNode }) => {
 	const [waku, setWaku] = useState<Waku | undefined>();
 	const [status, setStatus] = useState(ConnectionStatus.NotStarted);
 

@@ -6,8 +6,9 @@ import "shards-ui/dist/css/shards.min.css";
 // import icons
 //import images
 import AvatarClassicIcon from "./avatar.png";
+import { HelloWorldMessage } from "./lib/proto/hello_world";
 
-const Emoji = (props: any) => (
+const Emoji = (props: { label: string; toclick: () => void; symbol: string }) => (
 	<span
 		className="emoji"
 		role="img"
@@ -57,7 +58,7 @@ function ActiveReaction(props: { value: string }) {
 	}
 }
 
-function MessageLine(props: any) {
+function MessageLine(props: { message: HelloWorldMessage; currentUser: string }) {
 	const [displayStatus, setDisplayStatus] = React.useState(false);
 
 	const myRef = React.useRef<HTMLDivElement>(null);
@@ -93,9 +94,10 @@ function MessageLine(props: any) {
 		console.log("displayedStatus : ", displayStatus);
 	};
 
+	console.log("Comparison", props.message.userId, props.currentUser);
+
 	return (
-		//<div className={"message-line " + (props.message.from === props.currentUser ? "left-guy" : "right-guy")}>
-		<div className={"message-line left-guy"}>
+		<div className={"message-line " + (props.message.userId !== props.currentUser ? "left-guy" : "right-guy")}>
 			<div className="avatar">
 				<img className="avatar-icon" src={AvatarClassicIcon} alt="Avatar" />
 			</div>
@@ -109,14 +111,17 @@ function MessageLine(props: any) {
 				<Reactions innerRef={myRef} displayed={displayStatus} setterReaction={setReact} />
 				<ActiveReaction value={activeReact} />
 			</div>
+			{/* <div className="nickname" style={{ color: "black", fontSize: "0.8em" }}>
+				{props.message.nickName}
+			</div> */}
 		</div>
 	);
 }
 
-function Conversation(props: any) {
+function Conversation(props: { messages: HelloWorldMessage[]; currentUser: string }) {
 	return (
 		<div className="intermediate-box">
-			{props.messages.map((item: any, i: any) => (
+			{props.messages.map((item: HelloWorldMessage, i: number) => (
 				<MessageLine key={i} message={item} currentUser={props.currentUser} />
 			))}
 		</div>

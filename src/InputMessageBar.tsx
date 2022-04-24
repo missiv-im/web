@@ -7,7 +7,7 @@ import "shards-ui/dist/css/shards.min.css";
 // import icons
 import * as Icon from "react-bootstrap-icons";
 
-function SendButton(props: any) {
+function SendButton(props: { pushMessage: (value: string) => void }) {
 	return (
 		<div className="SendButton">
 			<Button className="btn-send" pill onClick={props.pushMessage}>
@@ -17,7 +17,7 @@ function SendButton(props: any) {
 	);
 }
 
-function InputMessageBar(props: any) {
+function InputMessageBar(props: { pushMessage: (value: string) => void }) {
 	const [inputValue, setInputValue] = React.useState("");
 
 	return (
