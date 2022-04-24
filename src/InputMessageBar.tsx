@@ -17,7 +17,7 @@ function SendButton(props: any) {
 	);
 }
 
-function InputMessageBar(props: any) {
+function InputMessageBar(props: { pushMessage: (value: string) => void }) {
 	const [inputValue, setInputValue] = React.useState("");
 
 	return (

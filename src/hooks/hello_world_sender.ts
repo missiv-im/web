@@ -1,20 +1,12 @@
 import { Waku, WakuMessage } from "js-waku";
-import HelloWorldMessage from "../lib/proto/hello_world";
+import { encodeMessage } from "../lib/proto/hello_world";
+import useNickName from "./useNickName";
 import useWaku from "./waku";
 
-export const contentTopic = "/missive/1/test/hello_world/proto";
+export const contentTopic = "/missive/1/test/hello_world_2/proto";
 
-const sendMessage = async (message: string, timestamp: Date, waku: Waku) => {
+const sendMessage = async (payload: Uint8Array, waku: Waku) => {
 	if (!waku) return false;
-
-	const time = timestamp.getTime();
-
-	// encode with protobuf
-	const protoMsg = HelloWorldMessage.create({
-		timestamp: time,
-		text: message
-	});
-	const payload = HelloWorldMessage.encode(protoMsg).finish();
 
 	// wrap it in a waku message
 	const wakuMessage = await WakuMessage.fromBytes(payload, contentTopic);
@@ -26,8 +18,18 @@ const sendMessage = async (message: string, timestamp: Date, waku: Waku) => {
 const useHelloWorldSender = () => {
 	// we suppose the dev checks whether waku is available beforehand
 	const { waku } = useWaku();
+	const { userId, nickName } = useNickName();
 
-	const sendHelloWorld = (message: string, timestamp: Date) => sendMessage(message, timestamp, waku!);
+	const sendHelloWorld = (message: string) => {
+		const payload = encodeMessage({
+			nickName,
+			userId,
+			timestamp: new Date(),
+			text: message
+		});
+
+		sendMessage(payload, waku!);
+	};
 	return sendHelloWorld;
 };
 
