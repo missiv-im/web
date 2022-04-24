@@ -8,7 +8,7 @@ import "shards-ui/dist/css/shards.min.css";
 import AvatarClassicIcon from "./avatar.png";
 import { HelloWorldMessage } from "./lib/proto/hello_world";
 
-const Emoji = (props: any) => (
+const Emoji = (props: { label: string; toclick: () => void; symbol: string }) => (
 	<span
 		className="emoji"
 		role="img"
