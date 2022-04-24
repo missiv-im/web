@@ -17,13 +17,5 @@ jobs:
             - name: Lint project
               run: yarn lint
 
-            - name: Build project
+            - name: Check build command
               run: yarn build
-
-            - name: Deploy
-              uses: s0/git-publish-subdir-action@develop
-              env:
-                  REPO: self
-                  BRANCH: gh-pages
-                  FOLDER: build
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
