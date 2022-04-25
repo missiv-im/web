@@ -25,7 +25,7 @@
 	justify-content: center;
 	font-size: calc(10px + 2vmin);
 	color: white;
-	border: 5px solid black;
+
 	overflow: auto;
 }
 
@@ -36,10 +36,10 @@
 	position: absolute;
 	/* width: 80%; */
 	top: 0;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
 	background-color: #ffffff;
-	border: 2px solid red;
+
 	flex: 1;
 	right: 0;
 }
@@ -101,12 +101,12 @@ header {
 	/* font-size: 1rem; */
 	/* display: flex; */
 	/* flex: 1 1; */
-	position: absolute;
+	position: sticky;
 	/* width: 20%; */
 	/* align-items: center; */
 	/* justify-content: center; */
 	/* background-color: #ffffff; */
-	border: 2px solid rgb(129, 22, 156);
+	
 	/* height: 100px; */
 	display: flex;
 	/* position: relative; */
@@ -125,7 +125,10 @@ header {
 	flex-direction: column;
 	flex: 1;
 	height: 100%;
-	border-right: 1px solid gray;
+
+	padding-left: 0px !important;
+	padding-right:0px !important;
+
 }
 
 .app-body {

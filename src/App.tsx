@@ -11,65 +11,75 @@ import { decodeMessage, HelloWorldMessage } from "./lib/proto/hello_world";
 import useNickName from "./hooks/useNickName";
 
 function IndicatorStatus() {
-	const { status } = useWaku();
+  const { status } = useWaku();
 
-	return (
-		<div>
-			<div
-				className="pin"
-				style={{
-					background: status !== ConnectionStatus.Connected ? "#c4c4c4" : "rgb(0, 207, 6)"
-				}}></div>
-		</div>
-	);
+  return (
+    <div>
+      <div
+        className="pin"
+        style={{
+          background:
+            status !== ConnectionStatus.Connected
+              ? "#c4c4c4"
+              : "rgb(0, 207, 6)",
+        }}
+      ></div>
+    </div>
+  );
 }
 
 function Header() {
-	return (
-		<header>
-			<div className="main-icon-header-container">
-				<MainIcon className="main-icon-header" />
-			</div>
-			<div className="right-header-container">
-				<IndicatorStatus />
-			</div>
-		</header>
-	);
+  return (
+    <header>
+      <div className="main-icon-header-container">
+        <MainIcon className="main-icon-header" />
+      </div>
+      <div className="right-header-container">
+        <IndicatorStatus />
+      </div>
+    </header>
+  );
 }
 
 interface TopicInterface {
-	title: string;
+  title: string;
 }
 
 function App() {
-	const { messages } = useMessageRetriever<HelloWorldMessage>([contentTopic], decodeMessage);
-	const sendHelloWorld = useHelloWorldSender();
-	const { userId } = useNickName();
+  const { messages } = useMessageRetriever<HelloWorldMessage>(
+    [contentTopic],
+    decodeMessage
+  );
+  const sendHelloWorld = useHelloWorldSender();
+  const { userId } = useNickName();
 
-	const initialTopics: TopicInterface[] = [
-		{
-			title: "Louis"
-		}
-	];
-	const [topics] = React.useState(initialTopics);
+  const initialTopics: TopicInterface[] = [
+    {
+      title: "Louis",
+    },
+    {
+      title: "Marc",
+    },
+  ];
+  const [topics] = React.useState(initialTopics);
 
-	return (
-		<div className="App">
-			<Header />
+  return (
+    <div className="App">
+      <Header />
 
-			<div className="App-content">
-				<div className="navigation-container col-lg-2">
-					<Navigation topics={topics} />
-				</div>
+      <div className="App-content">
+        <div className="navigation-container col-lg-3">
+          <Navigation topics={topics} />
+        </div>
 
-				<div className="messages-container col-lg-10">
-					<Conversation messages={messages} currentUser={userId} />
-				</div>
-			</div>
+        <div className="messages-container col-lg-9">
+          <Conversation messages={messages} currentUser={userId} />
+        </div>
+      </div>
 
-			<InputMessageBar pushMessage={(value: string) => sendHelloWorld(value)} />
-		</div>
-	);
+      <InputMessageBar pushMessage={(value: string) => sendHelloWorld(value)} />
+    </div>
+  );
 }
 
 export default App;
