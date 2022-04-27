@@ -72,12 +72,15 @@ function App() {
           <Navigation topics={topics} />
         </div>
 
-        <div className="messages-container col-lg-9">
-          <Conversation messages={messages} currentUser={userId} />
+        <div className="col-lg-9 messages-side-container">
+          <div className="messages-container">
+            <Conversation messages={messages} currentUser={userId} />
+          </div>
+          <InputMessageBar
+            pushMessage={(value: string) => sendHelloWorld(value)}
+          />
         </div>
       </div>
-
-      <InputMessageBar pushMessage={(value: string) => sendHelloWorld(value)} />
     </div>
   );
 }

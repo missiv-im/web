@@ -16,15 +16,37 @@
 
 .btn-send{
     border-radius:50vh;
-    width: 2rem;
-    display: grid !important;
+    width: 2.3rem;
+    height:2.3rem;
+    display: flex !important;
     justify-content: center;
     align-items: center;
     margin-left:1rem;
     font-size:1rem;
+    border:0px;
+    background-color: var(--primary-color);
 }
 
 .btn-send:focus{
     box-shadow: none!important;
     background-color:#007bff!important;
+    border:0px;
+}
+
+
+.input-message{
+    background-color: rgb(236, 236, 236);
+    color:gray;
+    border-radius:50vh;
+    border:none;
+    padding-left:1rem;
+    padding-right:1rem;
+    padding-top:0.4rem;
+    padding-bottom:0.4rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    outline:none;
+    float:left;
+    display: flex;
+
 }
