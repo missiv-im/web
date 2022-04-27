@@ -8,12 +8,24 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import { WakuContextProvider } from "./hooks/waku";
+import { SignalProtocolContextProvider } from "./hooks/signal_hooks";
+import localforage from "localforage";
+
+localforage.config({
+	driver: localforage.INDEXEDDB, // Force WebSQL; same as using setDriver()
+	name: "missiv.im",
+	version: 1.0,
+	storeName: "keyvaluepairs", // Should be alphanumeric, with underscores.
+	description: "some description"
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
 	<React.StrictMode>
 		<WakuContextProvider>
-			<App />
+			<SignalProtocolContextProvider>
+				<App />
+			</SignalProtocolContextProvider>
 		</WakuContextProvider>
 	</React.StrictMode>
 );

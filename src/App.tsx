@@ -6,10 +6,11 @@ import Conversation from "./Conversation";
 import Navigation from "./Navigation";
 import useWaku, { ConnectionStatus } from "./hooks/waku";
 import useMessageRetriever from "./hooks/useMessagesRetriever";
-import useHelloWorldSender, { contentTopic } from "./hooks/hello_world_sender";
-import { decodeMessage, HelloWorldMessage } from "./lib/proto/hello_world";
+import { useHelloWorldSender } from "./hooks/message_senders";
+import { decodeMessage as decodeHelloWorld, HelloWorldMessage } from "./lib/proto/hello_world";
+import { decodeMessage as decodeSharedPreKey, SharePreKeyMessage } from "./lib/proto/share_prekey";
 import useNickName from "./hooks/useNickName";
-import testSignal from "./lib/signal/test";
+import { HellWorldTopic, SharedPreKeyTopic } from "./lib/topics";
 
 function IndicatorStatus() {
 	const { status } = useWaku();
@@ -38,14 +39,22 @@ function Header() {
 	);
 }
 
+const CompoLogger = () => {
+	const { messages } = useMessageRetriever<SharePreKeyMessage>([SharedPreKeyTopic], decodeSharedPreKey);
+
+	console.log("PreKeyMsg:", messages);
+
+	return <></>;
+};
+
 interface TopicInterface {
 	title: string;
 }
 
 function App() {
-	const { messages } = useMessageRetriever<HelloWorldMessage>([contentTopic], decodeMessage);
-	const sendHelloWorld = useHelloWorldSender();
+	const { messages } = useMessageRetriever<HelloWorldMessage>([HellWorldTopic], decodeHelloWorld);
 	const { userId } = useNickName();
+	const sendHelloWorld = useHelloWorldSender();
 
 	const initialTopics: TopicInterface[] = [
 		{
@@ -54,9 +63,7 @@ function App() {
 	];
 	const [topics] = React.useState(initialTopics);
 
-	React.useEffect(() => {
-		testSignal();
-	}, []);
+	console.log("Rendering app.tsx");
 
 	return (
 		<div className="App">
@@ -72,7 +79,12 @@ function App() {
 				</div>
 			</div>
 
-			<InputMessageBar pushMessage={(value: string) => sendHelloWorld(value)} />
+			<InputMessageBar
+				pushMessage={(value: string) => {
+					sendHelloWorld(value);
+				}}
+			/>
+			<CompoLogger />
 		</div>
 	);
 }
