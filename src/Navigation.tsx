@@ -1,10 +1,5 @@
 import "./Navigation.css";
-
-export interface TopicInterface {
-	title: string;
-}
-
-function Topic(props: { name: TopicInterface }) {
+function Topic(props: any) {
 	return (
 		<div className="topic">
 			<div className="head-topics">{props.name.title}</div>
@@ -12,7 +7,7 @@ function Topic(props: { name: TopicInterface }) {
 	);
 }
 
-function Navigation(props: { topics: TopicInterface[] }) {
+function Navigation(props: any) {
 	return (
 		<div className="navigation">
 			<div className="search-bar">
@@ -32,7 +27,7 @@ function Navigation(props: { topics: TopicInterface[] }) {
 					</svg>
 				</button>
 			</div>
-			{props.topics.map((item: TopicInterface, i: number) => (
+			{props.topics.map((item: any, i: any) => (
 				<Topic key={i} name={item} />
 			))}
 		</div>

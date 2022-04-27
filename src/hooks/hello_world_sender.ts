@@ -28,7 +28,7 @@ const useHelloWorldSender = () => {
 			text: message
 		});
 
-		if (waku) sendMessage(payload, waku);
+		sendMessage(payload, waku!);
 	};
 	return sendHelloWorld;
 };

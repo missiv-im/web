@@ -3,12 +3,13 @@ import InputMessageBar from "./InputMessageBar";
 import { ReactComponent as MainIcon } from "./missive-icon.svg";
 import "./App.css";
 import Conversation from "./Conversation";
-import Navigation, { TopicInterface } from "./Navigation";
+import Navigation from "./Navigation";
 import useWaku, { ConnectionStatus } from "./hooks/waku";
 import useMessageRetriever from "./hooks/useMessagesRetriever";
 import useHelloWorldSender, { contentTopic } from "./hooks/hello_world_sender";
 import { decodeMessage, HelloWorldMessage } from "./lib/proto/hello_world";
 import useNickName from "./hooks/useNickName";
+import testSignal from "./lib/signal/test";
 
 function IndicatorStatus() {
 	const { status } = useWaku();
@@ -37,6 +38,10 @@ function Header() {
 	);
 }
 
+interface TopicInterface {
+	title: string;
+}
+
 function App() {
 	const { messages } = useMessageRetriever<HelloWorldMessage>([contentTopic], decodeMessage);
 	const sendHelloWorld = useHelloWorldSender();
@@ -48,6 +53,10 @@ function App() {
 		}
 	];
 	const [topics] = React.useState(initialTopics);
+
+	React.useEffect(() => {
+		testSignal();
+	}, []);
 
 	return (
 		<div className="App">

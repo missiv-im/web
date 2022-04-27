@@ -4,6 +4,14 @@
 	"homepage": ".",
 	"private": true,
 	"dependencies": {
+		"@privacyresearch/libsignal-protocol-typescript": "^0.0.15",
+		"@testing-library/jest-dom": "^5.16.4",
+		"@testing-library/react": "^13.1.1",
+		"@testing-library/user-event": "^13.5.0",
+		"@types/jest": "^27.4.1",
+		"@types/node": "^16.11.27",
+		"@types/react": "^18.0.5",
+		"@types/react-dom": "^18.0.1",
 		"assert": "^2.0.0",
 		"bootstrap-icons": "^1.8.1",
 		"buffer": "^6.0.3",
@@ -28,8 +36,7 @@
 		"start": "cra-webpack-rewired start",
 		"build": "cra-webpack-rewired build",
 		"test": "cra-webpack-rewired test",
-		"eject": "cra-webpack-rewired eject",
-		"lint": "eslint ./src/ --ext .js,.jsx,.ts,.tsx"
+		"eject": "cra-webpack-rewired eject"
 	},
 	"eslintConfig": {
 		"extends": [
@@ -52,22 +59,7 @@
 		]
 	},
 	"devDependencies": {
-		"@testing-library/jest-dom": "^5.16.4",
-		"@testing-library/react": "^13.1.1",
-		"@testing-library/user-event": "^13.5.0",
-		"@types/jest": "^27.4.1",
-		"@types/node": "^16.11.27",
-		"@types/react": "^18.0.5",
-		"@types/react-dom": "^18.0.1",
 		"@types/uuid": "^8.3.4",
-		"@typescript-eslint/eslint-plugin": "^5.20.0",
-		"@typescript-eslint/parser": "^5.20.0",
-		"cra-webpack-rewired": "^1.0.1",
-		"eslint": "^8.14.0",
-		"eslint-config-airbnb": "^19.0.4",
-		"eslint-plugin-import": "^2.26.0",
-		"eslint-plugin-jsx-a11y": "^6.5.1",
-		"eslint-plugin-react": "^7.29.4",
-		"eslint-plugin-react-hooks": "^4.4.0"
+		"cra-webpack-rewired": "^1.0.1"
 	}
 }

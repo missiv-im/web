@@ -22,11 +22,7 @@ const Emoji = (props: { label: string; toclick: () => void; symbol: string }) =>
 	</span>
 );
 
-function Reactions(props: {
-	displayed: boolean;
-	innerRef: React.RefObject<HTMLDivElement>;
-	setterReaction: (value: string) => void;
-}) {
+function Reactions(props: { displayed: boolean; innerRef: any; setterReaction: (value: string) => void }) {
 	console.log("[INFO] REactions is created");
 
 	if (props.displayed === true) {
