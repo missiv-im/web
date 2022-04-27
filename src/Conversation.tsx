@@ -6,7 +6,10 @@ import "shards-ui/dist/css/shards.min.css";
 // import icons
 //import images
 import AvatarClassicIcon from "./avatar.png";
-import { HelloWorldMessage } from "./lib/proto/hello_world";
+import { decodeMessage, HelloWorldMessage } from "./lib/proto/hello_world";
+import useMessageRetriever from "./hooks/useMessagesRetriever";
+import useNickName from "./hooks/useNickName";
+import { HellWorldTopic } from "./lib/topics";
 
 const Emoji = (props: { label: string; toclick: () => void; symbol: string }) => (
 	<span
@@ -23,7 +26,7 @@ const Emoji = (props: { label: string; toclick: () => void; symbol: string }) =>
 );
 
 function Reactions(props: { displayed: boolean; innerRef: any; setterReaction: (value: string) => void }) {
-	console.log("[INFO] REactions is created");
+	//console.log("[INFO] REactions is created");
 
 	if (props.displayed === true) {
 		return (
@@ -94,8 +97,6 @@ function MessageLine(props: { message: HelloWorldMessage; currentUser: string })
 		console.log("displayedStatus : ", displayStatus);
 	};
 
-	console.log("Comparison", props.message.userId, props.currentUser);
-
 	return (
 		<div className={"message-line " + (props.message.userId !== props.currentUser ? "left-guy" : "right-guy")}>
 			<div className="avatar">
@@ -118,11 +119,14 @@ function MessageLine(props: { message: HelloWorldMessage; currentUser: string })
 	);
 }
 
-function Conversation(props: { messages: HelloWorldMessage[]; currentUser: string }) {
+function Conversation() {
+	const { userId } = useNickName();
+	const { messages } = useMessageRetriever<HelloWorldMessage>([HellWorldTopic], decodeMessage);
+
 	return (
 		<div className="intermediate-box">
-			{props.messages.map((item: HelloWorldMessage, i: number) => (
-				<MessageLine key={i} message={item} currentUser={props.currentUser} />
+			{messages.map((item: HelloWorldMessage, i: number) => (
+				<MessageLine key={i} message={item} currentUser={userId} />
 			))}
 		</div>
 	);

@@ -7,10 +7,8 @@ import Navigation from "./Navigation";
 import useWaku, { ConnectionStatus } from "./hooks/waku";
 import useMessageRetriever from "./hooks/useMessagesRetriever";
 import { useHelloWorldSender } from "./hooks/message_senders";
-import { decodeMessage as decodeHelloWorld, HelloWorldMessage } from "./lib/proto/hello_world";
 import { decodeMessage as decodeSharedPreKey, SharePreKeyMessage } from "./lib/proto/share_prekey";
-import useNickName from "./hooks/useNickName";
-import { HellWorldTopic, SharedPreKeyTopic } from "./lib/topics";
+import { SharedPreKeyTopic } from "./lib/topics";
 
 function IndicatorStatus() {
 	const { status } = useWaku();
@@ -42,9 +40,16 @@ function Header() {
 const CompoLogger = () => {
 	const { messages } = useMessageRetriever<SharePreKeyMessage>([SharedPreKeyTopic], decodeSharedPreKey);
 
-	console.log("PreKeyMsg:", messages);
+	if (messages.length == 0) return <></>;
 
-	return <></>;
+	return (
+		<>
+			<p>KeyMessages: </p>
+			{messages.map((msg) => {
+				return msg.userId;
+			})}
+		</>
+	);
 };
 
 interface TopicInterface {
@@ -52,9 +57,9 @@ interface TopicInterface {
 }
 
 function App() {
-	const { messages } = useMessageRetriever<HelloWorldMessage>([HellWorldTopic], decodeHelloWorld);
-	const { userId } = useNickName();
 	const sendHelloWorld = useHelloWorldSender();
+
+	console.log("Rendering app.ts");
 
 	const initialTopics: TopicInterface[] = [
 		{
@@ -62,8 +67,6 @@ function App() {
 		}
 	];
 	const [topics] = React.useState(initialTopics);
-
-	console.log("Rendering app.tsx");
 
 	return (
 		<div className="App">
@@ -75,7 +78,7 @@ function App() {
 				</div>
 
 				<div className="messages-container col-lg-10">
-					<Conversation messages={messages} currentUser={userId} />
+					<Conversation />
 				</div>
 			</div>
 

@@ -41,10 +41,8 @@ export const SignalProtocolContextProvider = (props: { children: React.ReactNode
 	);
 };
 
-const useSignalProtocol = () => {
+export const useSignalProtocol = () => {
 	const { store, keyBundle, setKeyBundle } = useContext(SignalProtocolContext);
 
 	return { store, keyBundle, setKeyBundle };
 };
-
-export { useSignalProtocol };
