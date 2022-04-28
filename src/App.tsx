@@ -41,11 +41,6 @@ function Header() {
   );
 }
 
-interface TopicInterface {
-  title: string;
-}
-
-
 function App() {
   const { messages } = useMessageRetriever<HelloWorldMessage>(
     [contentTopic],

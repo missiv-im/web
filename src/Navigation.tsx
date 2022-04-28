@@ -1,5 +1,4 @@
 import "./Navigation.css";
-
 import * as React from "react";
 import AvatarConvIcon from "./avatar.png";
 function Topic(props: any) {
@@ -9,6 +8,9 @@ function Topic(props: any) {
       <div className="content-topic">Hello, comment vas ...</div>
     </div>
   );
+}
+export interface TopicInterface {
+  title: string;
 }
 
 function Navigation(props: any) {
@@ -22,7 +24,7 @@ function Navigation(props: any) {
       </div>
       <div className="topics-links">
         {props.topics.map(function (item: any, i: any) {
-          var getConvLine = (itemb: any) => (
+          const getConvLine = (itemb: any) => (
             <div className="conversation-link-container">
               <div className="avatar-conv">
                 <img
@@ -48,7 +50,6 @@ function Navigation(props: any) {
       </div>
     </div>
   );
-
 }
 
 export default Navigation;

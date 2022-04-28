@@ -15,12 +15,13 @@ module.exports = {
 	},
 	plugins: ["react", "@typescript-eslint"],
 	rules: {
-		indent: ["error", "tab"],
-		"linebreak-style": ["error", "unix"],
+
 		quotes: ["error", "double"],
 		semi: ["error", "always"],
 		"react/react-in-jsx-scope": "off",
-		"@typescript-eslint/no-explicit-any": "off"
+		"@typescript-eslint/no-explicit-any": "off",
+		"linebreak-style": 0,
+		"indent": "off"
 	},
 	settings: {
 		react: {
