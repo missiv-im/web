@@ -21,7 +21,7 @@ function Navigation(props: any) {
       </div>
       <div className="topics-links">
         {props.topics.map(function (item: any, i: any) {
-          var getConvLine = (itemb: any, ib: any) => (
+          var getConvLine = (itemb: any) => (
             <div className="conversation-link-container">
               <div className="avatar-conv">
                 <img
@@ -36,14 +36,12 @@ function Navigation(props: any) {
           if (i !== props.topics.length - 1) {
             return (
               <React.Fragment key={i}>
-                {getConvLine(item, i)}
+                {getConvLine(item)}
                 <div className="topics-separator"></div>
               </React.Fragment>
             );
           } else {
-            return (
-              <React.Fragment key={i}>{getConvLine(item, i)}</React.Fragment>
-            );
+            return <React.Fragment key={i}>{getConvLine(item)}</React.Fragment>;
           }
         })}
       </div>
