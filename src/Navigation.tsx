@@ -1,4 +1,5 @@
 import "./Navigation.css";
+
 import * as React from "react";
 import AvatarConvIcon from "./avatar.png";
 function Topic(props: any) {
@@ -49,6 +50,7 @@ function Navigation(props: any) {
       </div>
     </div>
   );
+
 }
 
 export default Navigation;
