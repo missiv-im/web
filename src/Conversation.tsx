@@ -28,11 +28,13 @@ const Emoji = (props: {
 );
 
 function Reactions(props: {
-  displayed: Boolean;
-  innerRef: any;
-  setterReaction: Function;
+
+	displayed: boolean;
+	innerRef: React.RefObject<HTMLDivElement>;
+	setterReaction: (value: string) => void;
 }) {
-  console.log("[INFO] REactions is created");
+	console.log("[INFO] REactions is created");
+
 
   if (props.displayed === true) {
     return (
@@ -85,6 +87,7 @@ function MessageLine(props: {
   };
   const handleClickOutside = (e: any) => {
     const myref = myRef.current;
+
 
     if (myref && !myref.contains(e.target)) {
       setClickedOutside(true);

@@ -17,9 +17,9 @@ export type WakuContextType = {
 
 const WakuContext = createContext<WakuContextType>({
 	waku: undefined,
-	setWaku: () => {},
+	setWaku: () => undefined,
 	status: ConnectionStatus.NotStarted,
-	setStatus: () => {}
+	setStatus: () => undefined
 });
 
 export const WakuContextProvider = (props: { children: React.ReactNode }) => {
@@ -66,7 +66,7 @@ const useWaku = () => {
 		};
 
 		// If Waku is already assigned, the job is done
-		if (!!ctx.waku) return;
+		if (ctx.waku) return;
 		// If Waku status not Started, it means we are already starting Waku
 		if (ctx.status !== ConnectionStatus.NotStarted) return;
 		// else we init the connection
