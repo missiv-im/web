@@ -1,11 +1,14 @@
 .intermediate-box {
-	width: 80%;
+	width: inherit;
 	display: flex;
 	flex-direction: column;
-	border: 2px solid green;
-	position: relative;
-	max-width: 650px;
+	padding-right:2rem;
+	position: absolute;
+	width:100%;
+
 }
+
+
 
 .message-line {
 	display: flex;
@@ -21,17 +24,24 @@
 }
 
 .message-box {
-	border-radius: 50vh;
+	border-radius: 1.25rem;
 	margin-left: 1rem;
 	margin-right: 1rem;
-	background: rgb(5, 138, 255);
+	background: rgb(99 158 255);
 	width: 100px;
 	display: flex;
 	justify-content: flex-start;
-	padding-left: 1rem;
-	padding-right: 1rem;
+	width:fit-content;
+	max-width:50%;
 	align-items: center;
 	position: relative;
+	text-align:start;
+	padding-bottom:0.4rem;
+	padding-top:0.4rem;
+	padding-left: 1.2rem;
+	padding-right: 1.2rem;
+	font-weight: 400;
+	font-size: 1.1rem;
 }
 
 .left-guy {

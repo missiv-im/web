@@ -1,42 +1,55 @@
 import "./Navigation.css";
-
+import * as React from "react";
+import AvatarConvIcon from "./avatar.png";
+function Topic(props: any) {
+  return (
+    <div className="topic">
+      <div className="head-topic">{props.name.title}</div>
+      <div className="content-topic">Hello, comment vas ...</div>
+    </div>
+  );
+}
 export interface TopicInterface {
-	title: string;
+  title: string;
 }
 
-function Topic(props: { name: TopicInterface }) {
-	return (
-		<div className="topic">
-			<div className="head-topics">{props.name.title}</div>
-		</div>
-	);
-}
-
-function Navigation(props: { topics: TopicInterface[] }) {
-	return (
-		<div className="navigation">
-			<div className="search-bar">
-				<input className="navigation-input" placeholder="Vos espaces...."></input>
-				<button className="navigation-input-button">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						fill="white"
-						className="bi bi-arrow-right"
-						viewBox="0 0 16 16">
-						<path
-							fillRule="evenodd"
-							d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
-						/>
-					</svg>
-				</button>
-			</div>
-			{props.topics.map((item: TopicInterface, i: number) => (
-				<Topic key={i} name={item} />
-			))}
-		</div>
-	);
+function Navigation(props: any) {
+  return (
+    <div className="navigation">
+      <div className="search-bar">
+        <input
+          className="navigation-input"
+          placeholder="Vos espaces...."
+        ></input>
+      </div>
+      <div className="topics-links">
+        {props.topics.map(function (item: any, i: any) {
+          const getConvLine = (itemb: any) => (
+            <div className="conversation-link-container">
+              <div className="avatar-conv">
+                <img
+                  className="avatar-conv-icon"
+                  src={AvatarConvIcon}
+                  alt="Avatar"
+                />
+              </div>
+              <Topic name={itemb} />
+            </div>
+          );
+          if (i !== props.topics.length - 1) {
+            return (
+              <React.Fragment key={i}>
+                {getConvLine(item)}
+                <div className="topics-separator"></div>
+              </React.Fragment>
+            );
+          } else {
+            return <React.Fragment key={i}>{getConvLine(item)}</React.Fragment>;
+          }
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default Navigation;
